@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <body>
+    {% include 'include/header.html' %}
+        <div id="lg1" class="tab-pane active">
+        <div class="login-form-container">
+            <div class="login-register-form">
+                <form action="{% url 'login' %}" method="post">
+                    {% csrf_token %}
+                    <input type="text" name="username" placeholder="Username">
+                        <input type="password" name="password" placeholder="Password">
+                    <div class="button-box">
+                        <div class="login-toggle-btn">
+                            <input type="checkbox">
+                            <label>Remember me</label>
+                            <a href="{% url 'password_reset' %}">Forgot Password?</a>
+                        </div>
+                        <button type="submit"><span>Login</span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    {% include 'include/footer.html' %}
+    {% endblock %}

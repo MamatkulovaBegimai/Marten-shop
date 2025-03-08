@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <body>
+    {% include 'include/header.html' %}
+        <div class="breadcrumb-area pt-95 pb-95 bg-img" style="background-image:url({% static 'img/banner/banner-2.jpg' %});">
+            <div class="container">
+                <div class="breadcrumb-content text-center">
+                    <h2>Contact Us</h2>
+                    <ul>
+                        <li><a href="index.html">home</a></li>
+                        <li class="active">Contact Us</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="contact-area pt-100 pb-100">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <div class="contact-info-wrapper text-center mb-30">
+                            <div class="contact-info-icon">
+                                <i class="ti-location-pin"></i>
+                            </div>
+                            <div class="contact-info-content">
+                                  <h4>Address</h4>
+                                <p>{{contact.address}}</p>
+                                <p><a href="#">{{contact.email}}</a></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <div class="contact-info-wrapper text-center mb-30">
+                            <div class="contact-info-icon">
+                                <i class="ti-mobile"></i>
+                            </div>
+                            <div class="contact-info-content">
+                                <h4>Contact us Anytime</h4>
+                                <p>Phone Number 1: {{contact.phone_number1}}</p>
+                                <p>Phone Number 2: {{contact.phone_number2}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <div class="contact-info-wrapper text-center mb-30">
+                            <div class="contact-info-icon">
+                                <i class="ti-email"></i>
+                            </div>
+                            <div class="contact-info-content">
+                                <h4>Write Some Words</h4>
+                                <p><a href="#">{{contact.email}} </a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="contact-message-wrapper">
+                            <h4 class="contact-title">GET IN TOUCH</h4>
+                            <div class="contact-message">
+                               <form method="post">
+                                   {% csrf_token %}
+                                   {{form.as_p}}
+                                   <button type="submit" class="btn-btn-primary">Отправить</button>
+                               </form>
+                                {% if messages %}
+                                <ul>
+                                    {% for message in messages %}
+                                    <li>{{ message }}</li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-map">
+                    <div id="map"></div>
+                </div>
+            </div>
+        </div>
+	    {% include 'include/footer.html' %}
+		
+		
+
+		<script>
+            function init() {
+                var mapOptions = {
+                    zoom: 11,
+                    scrollwheel: false,
+                    center: new google.maps.LatLng(40.709896, -73.995481),
+                    styles: 
+                    [
+                        {
+                            "featureType": "administrative",
+                            "elementType": "labels.text.fill",
+                            "stylers": [
+                                {
+                                    "color": "#444444"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "landscape",
+                            "elementType": "all",
+                            "stylers": [
+                                {
+                                    "color": "#f2f2f2"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "poi",
+                            "elementType": "all",
+                            "stylers": [
+                                {
+                                    "visibility": "off"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "road",
+                            "elementType": "all",
+                            "stylers": [
+                                {
+                                    "saturation": -100
+                                },
+                                {
+                                    "lightness": 45
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "road.highway",
+                            "elementType": "all",
+                            "stylers": [
+                                {
+                                    "visibility": "simplified"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "road.arterial",
+                            "elementType": "labels.icon",
+                            "stylers": [
+                                {
+                                    "visibility": "off"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "transit",
+                            "elementType": "all",
+                            "stylers": [
+                                {
+                                    "visibility": "off"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "water",
+                            "elementType": "all",
+                            "stylers": [
+                                {
+                                    "color": "#F6AB44"
+                                },
+                                {
+                                    "visibility": "on"
+                                }
+                            ]
+                        }
+                    ]
+                };
+                var mapElement = document.getElementById('map');
+                var map = new google.maps.Map(mapElement, mapOptions);
+                var marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(40.709896, -73.995481),
+                    map: map,
+                    icon: 'assets/img/icon-img/map.png',
+                    animation:google.maps.Animation.BOUNCE,
+                    title: 'Snazzy!'
+                });
+            }
+            google.maps.event.addDomListener(window, 'load', init);
+		</script>
+    {% endblock %}
