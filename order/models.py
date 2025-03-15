@@ -25,3 +25,16 @@ class OrderItem(models.Model):
         return f"{self.quantity} * {self.product.name} in order {self.order.id}"
 
 
+class BillingInformation(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="billing_information")
+    first_name = models.CharField(max_length=255, blank=True, null=True)
+    last_name = models.CharField(max_length=255, blank=True, null=True)
+    email = models.EmailField()
+    address = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+    state = models.CharField(max_length=255)
+    zip_code = models.CharField(max_length=255, blank=True, null=True)
+    phone_number = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"Billing Info for {self.user.username}"
