@@ -1,0 +1,48 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+
+# Django specific
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+db.sqlite3
+/media/
+staticfiles/
+*.swp
+shop/settings.py
+
+# If you are using PostgreSQL, exclude local database settings
+.env
+*.env
+config/settings_local.py
+
+# Celery task queue
+celerybeat-schedule
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Pipenv
+Pipfile.lock
+
+# Migrations (optional, if you don't want to commit them)
+**/migrations/*.py
+!**/migrations/__init__.py
