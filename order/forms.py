@@ -19,6 +19,13 @@ class ShippingMethodForm(forms.ModelForm):
         fields = ['name', 'price']
 
 
+class PaymentInformationForm(forms.ModelForm):
+    class Meta:
+        model = PaymentInformation
+        fields = ['method']
+
+
+
 class CreditCardForm(forms.ModelForm):
     class Meta:
         model = CreditCard

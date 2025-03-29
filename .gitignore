@@ -46,3 +46,11 @@ Pipfile.lock
 # Migrations (optional, if you don't want to commit them)
 **/migrations/*.py
 !**/migrations/__init__.py
+
+
+
+.env
+/media/
+db.sqlite3
+shop/settings.py
+venv

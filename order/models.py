@@ -7,6 +7,10 @@ class Order(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    billing_info = models.ForeignKey('BillingInformation', on_delete=models.SET_NULL, null=True, blank=True)
+    shipping_info = models.ForeignKey('ShippingInformation', on_delete=models.SET_NULL, null=True, blank=True)
+    payment_info = models.ForeignKey('PaymentInformation', on_delete=models.SET_NULL, null=True, blank=True)
+    credit_card = models.ForeignKey('CreditCard', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f"Order {self.id} by {self.user.username}"
@@ -45,6 +49,7 @@ class ShippingInformation(models.Model):
     address = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=255)
     use_billing_information = models.BooleanField(default=True)
+    shipping_method = models.ForeignKey('ShippingMethod', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f"Shipping Info for {self.user.username}"

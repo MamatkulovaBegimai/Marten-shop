@@ -1,5 +1,5 @@
 from django.contrib import admin
-from order.models import Order, OrderItem, BillingInformation
+from order.models import Order, OrderItem, BillingInformation, ShippingInformation, ShippingMethod, PaymentInformation, CreditCard
 
 # Register your models here.
 
@@ -22,4 +22,22 @@ class OrderItemAdmin(admin.ModelAdmin):
 
 @admin.register(BillingInformation)
 class BillingInformationAdmin(admin.ModelAdmin):
+    list_display = ('user', )
+
+@admin.register(ShippingInformation)
+class ShippingInformationAdmin(admin.ModelAdmin):
+    list_display = ('user', )
+
+@admin.register(ShippingMethod)
+class ShippingMethodAdmin(admin.ModelAdmin):
+    list_display = ('name', )
+
+
+@admin.register(PaymentInformation)
+class PaymentInformationAdmin(admin.ModelAdmin):
+    list_display = ('user', )
+
+
+@admin.register(CreditCard)
+class CreditCardAdmin(admin.ModelAdmin):
     list_display = ('user', )
