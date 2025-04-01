@@ -21,24 +21,20 @@
                         <div class="blog-details-wrapper res-mrg-top">
                             <div class="single-blog-wrapper">
                                 <div class="blog-img mb-30">
-                                    <img src="{% static 'img/blog/blog-details.jpg' %}" alt="">
+                                    <img src="{{blog.photo.url}}" alt="">
                                 </div>
                                 <div class="blog-details-content">
-                                    <h2>new shop collection our shop</h2>
+                                    <h2>{{blog.title}}</h2>
                                     <div class="blog-meta">
                                         <ul>
-                                            <li>May - 14.09.2018 </li>
+                                            <li>{{blog.created_at}}</li>
                                             <li>
                                                 <a href="#"> 02 Comments</a>
                                             </li>
                                         </ul>
                                     </div>
                                 </div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ull laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprhendit in voluptate velit esse cillum dolore eu fugiat to nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qei officia deser mollit anim id est to laborum.</p>
-                                <blockquote class="importent-title">
-                                    <h4>Lorem ipsum dolor sit amet, consecte adipisicing elit, sed do eiusmod tempor incididunt labo dolor magna aliqua. Ut enim ad minim veniam quis nostrud.</h4>
-                                </blockquote>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehendrit.</p>
+                                <p>{{blog.description}}</p>
                                 <div class="dec-img-wrapper">
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6">
@@ -74,57 +70,64 @@
                                 </div>
                             </div>
                             <div class="blog-comment-wrapper mt-55">
-                                <h4 class="blog-dec-title">comments : 02</h4>
-                                <div class="single-comment-wrapper mt-35">
+                                <h4 class="blog-dec-title">comments : {{comments|length}}</h4>
+                                {% for comment in comments %}
+                                <div class="single-comment-wrapper mt-35 {% if comment.is_reply %}ml-125{%endif%}">
                                     <div class="blog-comment-img">
                                         <img src="{% static 'img/blog/blog-comment1.png' %}" alt="">
                                     </div>
                                     <div class="blog-comment-content">
-                                        <h4>Anthony Stephens</h4>
-                                        <span>October 14, 2018 </span>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolor magna aliqua. Ut enim ad minim veniam, </p>
+                                        <h4>{{comment.user.username}}</h4>
+                                        <span>{{comment.created_at|date:"d M Y"}}</span>
+                                        <p>{{comment.text}}</p>
                                         <div class="blog-details-btn">
                                             <a href="blog-details.html">read more</a>
                                         </div>
+                                        {% if not comment.is_reply %}
+                                        <button class="reply-btn" onclick="showReplyForm({{comment.id}})">Reply</button>
+                                        <form method="post" class="reply-form" id="reply-form-{{comment.id}}" style="display: none">
+                                            {% csrf_token %}
+                                            <textarea name="text" placeholder="Your reply here..." required></textarea>
+                                            <input type="hidden" name="parent" value="{{comment.id}}">
+                                            <button type="submit" class="btn btn-secondary">Reply</button>
+                                        </form>
+                                        {% endif %}
                                     </div>
                                 </div>
+                                {% for reply in comment.replies.all %}
                                 <div class="single-comment-wrapper mt-50 ml-125">
                                     <div class="blog-comment-img">
                                         <img src="{% static 'img/blog/blog-comment2.png' %}" alt="">
                                     </div>
                                     <div class="blog-comment-content">
-                                        <h4>Anthony Stephens</h4>
-                                        <span>October 14, 2018 </span>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolor magna aliqua. Ut enim ad minim veniam, </p>
+                                        <h4>{{reply.user.username}}</h4>
+                                        <span>{{comment.created_at|date:"d M Y"}}</span>
+                                        <p>{{reply.text}}</p>
                                         <div class="blog-details-btn">
                                             <a href="blog-details.html">read more</a>
                                         </div>
                                     </div>
                                 </div>
+                                {% endfor %}
+                                {% empty %}
+                                    <p>No comments yet.</p>
+                                {% endfor %}
                             </div>
                             <div class="blog-reply-wrapper mt-50">
                                 <h4 class="blog-dec-title">post a comment</h4>
-                                <form action="#">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="leave-form">
-                                                <input type="text" placeholder="Full Name">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="leave-form">
-                                                <input type="email" placeholder="Eail Address ">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="text-leave">
-                                                <textarea placeholder="Massage"></textarea>
-                                                <input type="submit" value="SEND MASSAGE">
-                                            </div>
-                                        </div>
-                                    </div>
+                                <form method="post" action="{% url 'blog_detail' id=blog.id %}">
+                                   {% csrf_token %}
+                                    {{form.text}}
+                                    <input type="hidden" name="parent" value="">
+                                    <button type="submit">SEND MESSAGE</button>
                                 </form>
                             </div>
+                            <script>
+                                function showReplyForm(commentId) {
+                                    let form = document.getElementById("reply-form-" + commentId);
+                                    form.style.display = (form.style.display === "none") ? "block" : "none";
+                                }
+                            </script>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-4">

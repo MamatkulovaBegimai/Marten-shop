@@ -1,5 +1,5 @@
 from django import forms
-from main.models import ContactMessage
+from main.models import ContactMessage, Comment
 
 
 class ContactForm(forms.ModelForm):
@@ -10,3 +10,10 @@ class ContactForm(forms.ModelForm):
             'message': forms.Textarea(attrs={'rows': 5}),
         }
 
+
+class CommentForm(forms.ModelForm):
+    parent = forms.ModelChoiceField(queryset=Comment.objects.all(), widget=forms.HiddenInput(), required=False)
+
+    class Meta:
+        model = Comment
+        fields = ['text', 'parent']

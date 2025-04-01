@@ -1,10 +1,11 @@
 from django.core.mail import send_mail
 from django.core.paginator import Paginator
-from django.shortcuts import render, redirect
-from django.views.generic import TemplateView, ListView, View
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
+from django.views.generic import TemplateView, ListView, View, DetailView
 from main.models import Main, AboutUs, Team, Blog, ContactUs
 from product.models import Category, Product
-from main.forms import ContactForm
+from main.forms import ContactForm, CommentForm
 from shop import settings
 from django.contrib import messages
 
@@ -46,6 +47,39 @@ class BlogView(ListView):
         paginated_blogs = paginator.get_page(page_number)
         return render(request, self.template_name, {'blogs': paginated_blogs, 'query': query})
 
+
+class BlogDetailView(DetailView):
+    model = Blog
+    template_name = "blog-details.html"
+    context_object_name = 'blog'
+    form_class = CommentForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        blog = self.get_object()
+        comments = self.get_object().comments.filter(parent__isnull=True)
+        context["comments"] = comments
+        context["blog"] = blog
+        context["form"] = self.form_class()
+        return context
+
+    def get_object(self):
+        return get_object_or_404(Blog, id=self.kwargs.get("id"))
+
+    def post(self, request, *args, **kwargs):
+        blog = self.get_object()
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.blog = blog
+            comment.save()
+            return redirect(self.get_success_url(blog))
+        return self.render_to_response(self.get_context_data(form=form))
+
+    def get_success_url(self, blog):
+        return reverse("blog_detail", kwargs={"id":blog.id})
 
 
 class ContactView(View):
